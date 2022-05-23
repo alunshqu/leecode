@@ -11,17 +11,17 @@ public class HeapSort {
 
     private void heapSort(int[] nums) {
         int len = nums.length - 1;
-        buildMaxHeap(nums, len);
+        buildMaxHeap(nums, len + 1);
         for (int i = len; i >= 1; --i) {
             swap(nums, i, 0);
             len--;
-            maxHeapify(nums, 0, len);
+            maxHeapifyV2(nums, 0, i);
         }
     }
 
     private void buildMaxHeap(int[] nums, int len) {
-        for (int i = len / 2; i >= 0; i--) {
-            maxHeapify(nums, i, len);
+        for (int i = len / 2 - 1; i >= 0; i--) {
+            maxHeapifyV2(nums, i, len);
         }
     }
 
@@ -49,6 +49,44 @@ public class HeapSort {
         }
     }
 
+    private void maxHeapifyV2(int[] nums, int i, int len) {
+        int large = i;
+        int lson = i * 2 + 1;
+        int rson = i * 2 + 2;
+
+        if (lson < len) {
+            large = nums[lson] > nums[i] ? lson : i;
+        }
+        if (rson < len) {
+            large = nums[rson] > nums[large] ? rson : large;
+        }
+        if (large != i) {
+            swap(nums, i, large);
+        }
+
+    }
+
+    private void maxHeapifyV3(int[] nums, int i, int len) {
+        for (; i * 2 + 1 < len; ) {
+            int lson = i * 2 + 1;
+            int rson = i * 2 + 2;
+            int large = i;
+            if (lson < len && nums[i] < nums[lson]) {
+                large = lson;
+            }
+            if (rson < len && nums[large] < nums[rson]) {
+                large = rson;
+            }
+            if (i == large) {
+                break;
+            } else {
+                swap(nums, i, large);
+                i = large;
+            }
+        }
+    }
+
+
     private void swap(int[] nums, int i, int large) {
         if (i == large) {
             return;
@@ -64,8 +102,13 @@ public class HeapSort {
 
     public static void main(String[] args) {
         HeapSort heapSort = new HeapSort();
-        heapSort.printArray(heapSort.sortArray(new int[]{1, 6, 7, 3, 2, 9}));
-
+        int[] nums = new int[]{1, 6, 7, 3, 2, 9};
+        int firstRoot = nums.length / 2 - 1;
+        for(int i = firstRoot ; i >= 0; i--) {
+            heapSort.maxHeapifyV3(nums, i, nums.length);
+        }
+        //heapSort.printArray(heapSort.sortArray(new int[]{1, 6, 7, 3, 2, 9}));
+        System.out.println(Arrays.toString(nums));
 
     }
 }
