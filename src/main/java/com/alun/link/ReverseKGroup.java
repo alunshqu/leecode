@@ -27,7 +27,6 @@ public class ReverseKGroup {
             length++;
             head = head.next;
         }
-        head = dummy.next;
         for (int i = 0; i < length % k; i++) {
             for (int j = 0; j < k - 1; j++) {
                 next = current.next;
